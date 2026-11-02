@@ -16,7 +16,7 @@ Never recolour, stretch or redraw the logo.
 Every image here except headshot.jpg is drawn at random as a Short background, so only add clean photos with no text baked in.
 - autumn-suit-full.jpg — full-length, pink turban, beige suit, red autumn foliage.
 - staircase-pose.jpg — full-length, lilac turban, grey suit, on a grand staircase.
-- silver-club-award-2023.jpg — holding the RCR Silver Club 2023 award at the RCR media wall.
+- silver-club-award-2023.jpg — holding the RCR Silver Club 2023 award at the RCR media wall. Award wording: lead with the latest Gold Club (Aug 2026); Silver Club 2023 may be mentioned only as an extra.
 
 ## assets/marketing — finished graphics with text baked in (NOT used as Short backgrounds)
 - awards/gold-club-aug-2026.jpg — RCR Gold Club, August 2026 announcement graphic.
