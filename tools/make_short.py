@@ -6,6 +6,8 @@ JSON keys:
   hookSub  one line under the hook, max ~10 words
   points   exactly 3 objects {"title": max ~5 words, "text": max ~16 words}
   cta      call to action, e.g. "Book a free 15-min call"
+  voice    optional list of 5 narration lines (hook, point 1, 2, 3, closing). Spoken by a Piper
+           text-to-speech narrator (third person); each scene stretches to fit its line.
   photos   optional list of 4 file names from assets/photos for hook, point 1, 2, 3
            (default: a rotation of the non-headshot photos). CTA always uses headshot.jpg.
 Scenes: hook 3.4s, three points 4.2s each, CTA 4.6s (~20.6s). Photos slowly zoom; text slides in.
@@ -137,8 +139,34 @@ def prep_bg(src, dst):
     im = im.crop((x, y, x + tw, y + th)).filter(ImageFilter.UnsharpMask(radius=2, percent=60, threshold=2))
     ImageEnhance.Contrast(im).enhance(1.05).save(dst, quality=95)
 
+VOICE = os.environ.get("PIPER_VOICE", "en-us-ryan-high")
+VOICE_DIR = os.path.expanduser("~/.cache/piper")
+
+def ensure_voice():
+    model = os.path.join(VOICE_DIR, f"{VOICE}.onnx")
+    if not os.path.exists(model):
+        os.makedirs(VOICE_DIR, exist_ok=True)
+        tgz = os.path.join(VOICE_DIR, f"{VOICE}.tar.gz")
+        subprocess.run(["curl", "-sSL", "-o", tgz, f"https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-{VOICE}.tar.gz"], check=True)
+        subprocess.run(["tar", "xzf", tgz, "-C", VOICE_DIR], check=True)
+    return model
+
+def dur_of(path):
+    return float(subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", path],
+                                capture_output=True, text=True, check=True).stdout)
+
 tmp = tempfile.mkdtemp()
 asyncio.run(shoot(tmp))
+
+voice = d.get("voice")
+if voice and not os.environ.get("FRAMES_ONLY"):
+    model = ensure_voice()
+    for si, line in enumerate(voice[:len(scenes)]):
+        wav = f"{tmp}/vo{si}.wav"
+        subprocess.run(["piper", "-m", model, "--length_scale", "0.92", "--sentence_silence", "0.15", "-f", wav],
+                       input=line, text=True, check=True, capture_output=True)
+        scenes[si]["vo"] = wav
+        scenes[si]["dur"] = round(max(scenes[si]["dur"], 0.25 + dur_of(wav) + 0.35), 2)
 
 if os.environ.get("FRAMES_ONLY"):
     from PIL import Image
@@ -186,8 +214,22 @@ for si, sc in enumerate(scenes):
 open(f"{tmp}/list.txt", "w").write("\n".join(lst))
 subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", f"{tmp}/list.txt", "-c", "copy", f"{tmp}/v.mp4"], check=True)
 tmpout = out + ".tmp.mp4"
-subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", f"{tmp}/v.mp4", "-f", "lavfi", "-i", "anullsrc=r=44100:cl=stereo",
-                "-map", "0:v", "-map", "1:a", "-c:v", "copy", "-c:a", "aac", "-shortest", "-movflags", "+faststart", tmpout], check=True)
+if all("vo" in sc for sc in scenes):
+    # each scene's narration starts 0.25s in and is padded to the scene's length
+    parts = []
+    for si, sc in enumerate(scenes):
+        a = f"{tmp}/a{si}.wav"
+        subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", sc["vo"], "-af",
+                        f"aresample=44100,adelay=250|250,apad,atrim=0:{sc['dur']}", "-ac", "2", a], check=True)
+        parts.append(f"file '{a}'")
+    open(f"{tmp}/alist.txt", "w").write("\n".join(parts))
+    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", f"{tmp}/alist.txt",
+                    "-af", "loudnorm=I=-14:TP=-1.5:LRA=11", "-ar", "44100", f"{tmp}/vo.wav"], check=True)
+    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", f"{tmp}/v.mp4", "-i", f"{tmp}/vo.wav",
+                    "-map", "0:v", "-map", "1:a", "-c:v", "copy", "-c:a", "aac", "-b:a", "160k", "-shortest", "-movflags", "+faststart", tmpout], check=True)
+else:
+    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", f"{tmp}/v.mp4", "-f", "lavfi", "-i", "anullsrc=r=44100:cl=stereo",
+                    "-map", "0:v", "-map", "1:a", "-c:v", "copy", "-c:a", "aac", "-shortest", "-movflags", "+faststart", tmpout], check=True)
 os.rename(tmpout, out)
 shutil.rmtree(tmp)
 print(out, "photos:", photos)
