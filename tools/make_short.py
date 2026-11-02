@@ -19,6 +19,7 @@ import json, sys, html, asyncio, os, subprocess, tempfile, shutil, random
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 PHOTOS = os.path.join(ROOT, "assets", "photos")
+BRAND = os.path.join(ROOT, "assets", "brand")
 FONTS = os.path.join(HERE, "fonts")
 PF, LA = f"{FONTS}/playfair-display-latin", f"{FONTS}/lato-latin"
 RED, GOLD_L, GOLD_D, INK = "#e8323a", "#f4eb8d", "#b07a3c", "#31312f"
@@ -86,7 +87,7 @@ h2{{font-family:PF;font-weight:900;font-size:82px;line-height:1.05;margin-top:22
 def page(inner):
     return f'<html><head><style>{CSS}</style></head><body>{inner}</body></html>'
 
-TOP = (f'<div class="shade"></div><div class="brand">{crest}<div><b>ROYAL CANADIAN</b><i>REALTY, BROKERAGE</i></div></div>'
+TOP = (f'<div class="shade"></div><div class="brand"><img src="file://{BRAND}/logo-white.png" style="height:120px;display:block;filter:drop-shadow(0 2px 6px rgba(0,0,0,.55))"></div>'
        f'<div class="who"><b>Satnampal Singh</b><span>647-780-2560</span></div>')
 
 # Each scene: background (photo path or None for white), duration, html (one flowing layout), layer start times.

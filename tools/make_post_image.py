@@ -1,11 +1,14 @@
 """Render a branded 1080x1080 real-estate post image (business-card palette: red, white, gold).
 Usage: python3 make_post_image.py '<json>' out.png
-JSON keys: tag, headline (may use <em>..</em> for gold italic), sub, points (<=3), cta
+JSON keys: tag, headline (may use <em>..</em> for red italic), sub, points (<=3), cta, subTop,\n  art: "headshot" (default; his photo in a gold ring, bottom right) or "house" (line illustration)\nTop-left uses the official Royal Canadian Realty logo from assets/brand/logo-gold.png.
 """
 import json, sys, html, asyncio, os, tempfile
 from playwright.async_api import async_playwright
 
-FONTS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fonts")
+HERE = os.path.dirname(os.path.abspath(__file__))
+FONTS = os.path.join(HERE, "fonts")
+BRAND = os.path.join(os.path.dirname(HERE), "assets", "brand")
+PORTRAITS = os.path.join(os.path.dirname(HERE), "assets", "portraits")
 PF = f"{FONTS}/playfair-display-latin"
 LA = f"{FONTS}/lato-latin"
 
@@ -37,6 +40,9 @@ mail_ic = '<svg viewBox="0 0 24 24" width="26" height="26"><path fill="#fff" d="
 globe_ic = f'<svg viewBox="0 0 24 24" width="26" height="26"><g fill="none" stroke="{INK}" stroke-width="1.8"><circle cx="12" cy="12" r="9.5"/><path d="M2.5 12h19M12 2.5c3 3 3 16 0 19M12 2.5c-3 3-3 16 0 19"/></g></svg>'
 GOLDBAR = f"linear-gradient(90deg,{GOLD_D} 0%,#d9b25e 25%,{GOLD_L} 50%,#d9b25e 75%,{GOLD_D} 100%)"
 
+art = (f'<div class="house">{house}</div>' if d.get("art") == "house"
+       else f'<div class="me"><img src="file://{PORTRAITS}/headshot-cutout.png"></div>')
+
 page = f"""<html><head><style>
 @font-face{{font-family:PF;font-weight:700;src:url(file://{PF}-700-normal.woff2)}}
 @font-face{{font-family:PF;font-weight:900;src:url(file://{PF}-900-normal.woff2)}}
@@ -62,6 +68,9 @@ ul{{list-style:none;margin-top:22px}}
 li{{display:flex;align-items:center;gap:16px;font-size:29px;font-weight:700;line-height:1.3;margin-top:18px;background:#fbf3df;border-left:5px solid #d9b25e;padding:12px 18px;color:{INK}}}
 li svg{{flex:0 0 34px}}
 .house{{position:absolute;right:40px;bottom:262px;transform:scale(.85);transform-origin:bottom right}}
+.brand img{{height:100px;display:block}}
+.me{{position:absolute;right:64px;bottom:276px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle at 50% 40%,#fff 0%,#fbf3df 100%);border:9px solid {RED};box-shadow:0 0 0 6px #e6cf8a,0 14px 30px rgba(0,0,0,.18);overflow:hidden}}
+.me img{{position:absolute;left:50%;bottom:0;width:112%;transform:translateX(-50%)}}
 .redband{{position:absolute;left:0;right:0;bottom:70px;height:170px;background:{RED};display:flex;align-items:center;justify-content:space-between;padding:0 44px 0 70px;color:#fff}}
 .redband:before{{content:'';position:absolute;left:0;right:0;top:0;height:6px;background:{GOLDBAR}}}
 .name{{font-family:PF;font-weight:900;font-size:46px;letter-spacing:1px;line-height:1}}
@@ -77,13 +86,13 @@ li svg{{flex:0 0 34px}}
 .goldbar .sep{{opacity:.7}}
 </style></head><body>
 <div class="wedge"></div><div class="corner"></div><div class="frame"></div>
-<div class="brand">{crest}<div><b>ROYAL CANADIAN</b><i>REALTY, BROKERAGE</i></div></div>
+<div class="brand"><img src="file://{BRAND}/logo-gold.png"></div>
 <div class="motto">&ldquo;Believe In The Best&rdquo;</div>
 <span class="tag">{e(d.get('tag'))}</span>
 <h1>{d.get('headline','')}</h1>
 <div class="body"><p class="sub">{e(d.get('sub'))}</p>
 <ul>{pts}</ul></div>
-<div class="house">{house}</div>
+{art}
 <div class="redband">
   <div><div class="name">SATNAMPAL <span>Singh</span></div>
   <div class="role">Sales Representative · Gold Club Award Winner</div>
