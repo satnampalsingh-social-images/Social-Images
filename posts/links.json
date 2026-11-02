@@ -1,0 +1,16 @@
+{
+  "_note": "Landing page for each post theme. The daily-post and YouTube Short scheduled tasks pick the link from here. To send people to a more specific page, replace the URL for that theme (keep the full https:// address). 'pages' can hold extra topic pages (e.g. a blog article) keyed by a short topic name; a task uses a 'pages' entry when today's topic clearly matches it, otherwise the theme link.",
+  "themes": {
+    "zero-down":      "https://www.findyourhouseingta.com/",
+    "first-time-buyer": "https://www.findyourhouseingta.com/",
+    "neighbourhood":  "https://www.findyourhouseingta.com/",
+    "market-update":  "https://www.findyourhouseingta.com/",
+    "buyer-tip":      "https://www.findyourhouseingta.com/",
+    "mortgage":       "https://www.findyourhouseingta.com/",
+    "investor":       "https://www.findyourhouseingta.com/",
+    "myth-faq":       "https://www.findyourhouseingta.com/",
+    "seller":         "https://www.dreamhomeseller.ca/",
+    "default":        "https://www.findyourhouseingta.com/"
+  },
+  "pages": {}
+}
