@@ -40,6 +40,7 @@ import json, sys, os, html, datetime, urllib.parse
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE = "https://satnampalsingh-social-images.github.io/Social-Images/"
+RAW = "https://raw.githubusercontent.com/satnampalsingh-social-images/Social-Images/main/"  # always-on image host
 e = lambda s: html.escape(s or "", quote=True)
 
 AGENT = {
@@ -310,7 +311,7 @@ def page(title, desc, url, body, schema, og_img, og_type="article", keywords=Non
 
 def build_article(a, reg):
     url = f"{BASE}blog/{a['slug']}/"
-    cover = BASE + a["cover"] if a.get("cover") else BASE + "assets/brand/logo-gold.png"
+    cover = RAW + a["cover"] if a.get("cover") else RAW + "assets/brand/logo-gold.png"
     pretty = datetime.date.fromisoformat(a["date"]).strftime("%B %-d, %Y")
     words = sum(len(s["html"].split()) for s in a["sections"])
     mins = max(3, round(words / 220))
@@ -415,6 +416,9 @@ def boldtrail_fragment(a, cover):
         {"@type": "Question", "name": f["q"], "acceptedAnswer": {"@type": "Answer", "text": f["a"]}} for f in a["faq"]]}, ensure_ascii=False)
     return (f'<!-- BoldTrail paste version: {a["title"]} -->\n'
             f'<div style="font-family:Lato,Arial,sans-serif;color:{INK};line-height:1.7;font-size:17px">'
+            f'<p style="margin:0"><span style="display:inline-block;background:{GOLD_D};color:#fff;font-weight:bold;font-size:13px;letter-spacing:.08em;padding:4px 10px;border-radius:4px">{e(a["category"].upper())}</span></p>'
+            f'<h1 style="font-family:Georgia,serif;color:{RED_DD};font-size:34px;line-height:1.2;margin:12px 0 8px">{e(a["title"])}</h1>'
+            f'<p style="font-size:14px;color:#5d5d59;margin:0 0 16px">By {AGENT["name"]}, {AGENT["title"]}, {AGENT["brokerage"]} · {datetime.date.fromisoformat(a["date"]).strftime("%B %-d, %Y")}</p>'
             f'<p><img src="{cover}" alt="{e(a["title"])}" style="max-width:100%;height:auto;border-radius:8px"></p>'
             f'<p style="font-size:19px"><strong>{e(a["hero_sub"])}</strong></p>'
             + (f'<table style="width:100%;border-collapse:separate"><tr>{stats}</tr></table>' if stats else "") +
