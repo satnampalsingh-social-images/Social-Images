@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://satnampalsingh-social-images.github.io/Social-Images/sitemap.xml
