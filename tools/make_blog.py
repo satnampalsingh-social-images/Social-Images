@@ -41,6 +41,7 @@ import json, sys, os, html, datetime, urllib.parse
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE = "https://satnampalsingh-social-images.github.io/Social-Images/"
 RAW = "https://raw.githubusercontent.com/satnampalsingh-social-images/Social-Images/main/"  # always-on image host
+SITE_BLOG = "https://www.findyourhouseingta.com/blog.php"  # his BoldTrail blog page (newest post on top)
 CDN = "https://cdn.jsdelivr.net/gh/satnampalsingh-social-images/Social-Images@main/"  # image host for BoldTrail pages
 e = lambda s: html.escape(s or "", quote=True)
 
@@ -478,7 +479,7 @@ def main():
     build_index(reg)
     lp = os.path.join(ROOT, "posts", "links.json")
     links = json.load(open(lp))
-    links.setdefault("pages", {})[a["slug"]] = url
+    links.setdefault("pages", {})[a["slug"]] = SITE_BLOG  # posts send readers to his BoldTrail blog
     with open(lp, "w") as f:
         json.dump(links, f, indent=2, ensure_ascii=False); f.write("\n")
     print(url)
