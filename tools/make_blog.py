@@ -41,6 +41,7 @@ import json, sys, os, html, datetime, urllib.parse
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE = "https://satnampalsingh-social-images.github.io/Social-Images/"
 RAW = "https://raw.githubusercontent.com/satnampalsingh-social-images/Social-Images/main/"  # always-on image host
+CDN = "https://cdn.jsdelivr.net/gh/satnampalsingh-social-images/Social-Images@main/"  # image host for BoldTrail pages
 e = lambda s: html.escape(s or "", quote=True)
 
 AGENT = {
@@ -372,7 +373,7 @@ def build_article(a, reg):
     with open(os.path.join(out, "index.html"), "w") as f:
         f.write(page(a["title"] + " | Satnampal Singh", a["description"], url, body, schema, cover, keywords=a.get("keywords")))
     with open(os.path.join(out, "boldtrail.html"), "w") as f:
-        f.write(boldtrail_fragment(a, cover))
+        f.write(boldtrail_fragment(a, CDN + a["cover"] if a.get("cover") else cover))
     return url
 
 
