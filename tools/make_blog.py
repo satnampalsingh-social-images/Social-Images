@@ -196,7 +196,37 @@ def build_article(a):
     os.makedirs(out, exist_ok=True)
     with open(os.path.join(out, "index.html"), "w") as f:
         f.write(page(a["title"] + " | Satnampal Singh", a["description"], url, body, schema, cover, keywords=a.get("keywords")))
+    with open(os.path.join(out, "boldtrail.html"), "w") as f:
+        f.write(boldtrail_fragment(a, cover))
     return url
+
+
+def boldtrail_fragment(a, cover):
+    """Body-only HTML with inline styles, for pasting into the BoldTrail blog editor's source/HTML view."""
+    R, RD, GD, INK, SOFT = "#e8323a", "#b8202a", "#b07a3c", "#31312f", "#faf6ee"
+    h2 = f'style="font-family:Georgia,serif;color:{INK};border-bottom:3px solid {R};padding-bottom:6px;margin:32px 0 12px"'
+    take = "".join(f"<li>{e(t)}</li>" for t in a["takeaways"])
+    secs = "".join(f'<h2 {h2}>{e(s["h2"])}</h2>{s["html"]}' for s in a["sections"])
+    faq = "".join(f'<h3 style="font-family:Georgia,serif;color:{RD};margin:18px 0 6px">{e(f["q"])}</h3><p>{e(f["a"])}</p>' for f in a["faq"])
+    srcs = "".join(f'<li><a href="{e(s["url"])}" target="_blank" rel="noopener">{e(s["name"])}</a></li>' for s in a.get("sources", []))
+    faq_ld = json.dumps({"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [
+        {"@type": "Question", "name": f["q"], "acceptedAnswer": {"@type": "Answer", "text": f["a"]}} for f in a["faq"]]}, ensure_ascii=False)
+    return (f'<!-- BoldTrail paste version: {a["title"]} -->\n'
+            f'<div style="font-family:Lato,Arial,sans-serif;color:{INK};line-height:1.7;font-size:17px">'
+            f'<p><img src="{cover}" alt="{e(a["title"])}" style="max-width:100%;height:auto;border-radius:8px"></p>'
+            f'<p style="font-size:19px"><strong>{e(a["hero_sub"])}</strong></p>'
+            f'<div style="background:{SOFT};border-left:6px solid {GD};padding:14px 20px;border-radius:6px;margin:20px 0">'
+            f'<p style="margin:0 0 6px;font-weight:bold">Key takeaways</p><ul style="margin:0">{take}</ul></div>'
+            f'{secs}<h2 {h2}>Frequently asked questions</h2>{faq}'
+            f'<div style="background:{RD};color:#fff;padding:22px;border-radius:10px;margin:30px 0;text-align:center">'
+            f'<p style="font-size:22px;font-family:Georgia,serif;margin:0 0 8px;color:#fff"><strong>Talk it through with Satnampal</strong></p>'
+            f'<p style="margin:0 0 10px;color:#fff">Book a free 15-minute call — no pressure, just a clear plan for your next move in the GTA.</p>'
+            f'<p style="margin:0;color:#fff">📞 <a href="tel:{AGENT["tel"]}" style="color:#fff">{AGENT["phone"]}</a> · ✉️ '
+            f'<a href="mailto:{AGENT["email"]}" style="color:#fff">{AGENT["email"]}</a></p></div>'
+            + (f'<p style="font-size:14px"><strong>Sources</strong></p><ul style="font-size:14px">{srcs}</ul>' if srcs else "") +
+            f'<p style="font-size:13px;color:#5d5d59">{AGENT["name"]}, {AGENT["title"]} | {AGENT["brokerage"]} | Gold Club Award Winner · Believe In The Best. '
+            f'General information only, not financial, legal or tax advice.</p></div>\n'
+            f'<script type="application/ld+json">{faq_ld}</script>\n')
 
 
 def build_index(reg):
