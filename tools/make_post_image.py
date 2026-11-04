@@ -1,6 +1,6 @@
 """Render a branded 1080x1080 real-estate post image (business-card palette: red, white, gold).
 Usage: python3 make_post_image.py '<json>' out.png
-JSON keys: tag, headline (may use <em>..</em> for red italic), sub, points (<=3), cta, subTop,\n  art: "headshot" (default; his photo in a gold ring, bottom right) or "house" (line illustration)\nTop-left uses the official Royal Canadian Realty logo from assets/brand/logo-gold.png.
+JSON keys: tag, headline (may use <em>..</em> for red italic), sub, points (<=3), cta, subTop,\n  art: "headshot" (default; his photo in a gold ring, bottom right) or "house" (line illustration)\n  layout: "stats" (optional, for market updates): hero {value,label,note}, stats [{value,label,change,dir:"down"|"up"}] (3), takeaway\nTop-left uses the official Royal Canadian Realty logo from assets/brand/logo-gold.png.
 """
 import json, sys, html, asyncio, os, tempfile
 from playwright.async_api import async_playwright
@@ -43,6 +43,16 @@ GOLDBAR = f"linear-gradient(90deg,{GOLD_D} 0%,#d9b25e 25%,{GOLD_L} 50%,#d9b25e 7
 art = (f'<div class="house">{house}</div>' if d.get("art") == "house"
        else f'<div class="me"><img src="file://{PORTRAITS}/headshot-cutout.png"></div>')
 
+arrow = lambda dr: ('&#9660;' if dr == "down" else '&#9650;')
+stats_html = ""
+if d.get("layout") == "stats":
+    h = d.get("hero", {})
+    cards = "".join(f'<div class="sc"><div class="sv">{e(c.get("value"))}</div><div class="sl">{e(c.get("label"))}</div>'
+                    f'<div class="sd {e(c.get("dir","down"))}">{arrow(c.get("dir","down"))} {e(c.get("change"))}</div></div>' for c in d.get("stats", [])[:3])
+    stats_html = (f'<div class="hero"><div class="hv">{e(h.get("value"))}</div><div class="hl"><b>{e(h.get("label"))}</b><span>{e(h.get("note"))}</span></div></div>'
+                  f'<div class="cards">{cards}</div>'
+                  f'<div class="take"><b>What it means:</b> {e(d.get("takeaway"))}</div>')
+
 page = f"""<html><head><style>
 @font-face{{font-family:PF;font-weight:700;src:url(file://{PF}-700-normal.woff2)}}
 @font-face{{font-family:PF;font-weight:900;src:url(file://{PF}-900-normal.woff2)}}
@@ -84,14 +94,25 @@ li svg{{flex:0 0 34px}}
 .mail{{font-size:23px;font-weight:700;margin-top:8px}}
 .goldbar{{position:absolute;left:0;right:0;bottom:0;height:70px;background:{GOLDBAR};display:flex;align-items:center;justify-content:center;gap:14px;font-family:PF;font-weight:700;font-size:27px;color:{INK}}}
 .goldbar .sep{{opacity:.7}}
+.hero{{position:absolute;left:84px;width:610px;top:{d.get('subTop',360)}px;display:flex;align-items:center;gap:22px;background:linear-gradient(135deg,#fff5f5,#fbf3df);border:2px solid #e6cf8a;border-left:10px solid {RED};padding:14px 24px}}
+.hv{{font-variant-numeric:lining-nums;font-family:PF;font-weight:900;font-size:122px;line-height:1;color:{RED};letter-spacing:-3px}}
+.hl b{{display:block;font-size:27px;font-weight:900;line-height:1.2;color:{INK}}}
+.hl span{{display:block;font-size:21px;color:#6a6a66;margin-top:6px}}
+.cards{{position:absolute;left:84px;width:610px;top:{d.get('subTop',360)+200}px;display:flex;gap:14px}}
+.sc{{flex:1;background:{INK};color:#fff;border-radius:14px;padding:16px 14px 14px;text-align:center;border-top:6px solid #d9b25e}}
+.sv{{font-variant-numeric:lining-nums;font-family:PF;font-weight:900;font-size:40px;line-height:1.05}}
+.sl{{font-size:18px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#f4eb8d;margin-top:6px}}
+.sd{{display:inline-block;margin-top:9px;font-size:20px;font-weight:900;padding:4px 12px;border-radius:20px;background:{RED}}}
+.sd.up{{background:#2f8f4e}}
+.take{{position:absolute;left:84px;width:610px;top:{d.get('subTop',360)+380}px;font-size:25px;line-height:1.35;color:#4a4a48}}
+.take b{{color:{RED}}}
 </style></head><body>
 <div class="wedge"></div><div class="corner"></div><div class="frame"></div>
 <div class="brand"><img src="file://{BRAND}/logo-gold.png"></div>
 <div class="motto">&ldquo;Believe In The Best&rdquo;</div>
 <span class="tag">{e(d.get('tag'))}</span>
 <h1>{d.get('headline','')}</h1>
-<div class="body"><p class="sub">{e(d.get('sub'))}</p>
-<ul>{pts}</ul></div>
+{stats_html if stats_html else f'<div class="body"><p class="sub">{e(d.get("sub"))}</p><ul>{pts}</ul></div>'}
 {art}
 <div class="redband">
   <div><div class="name">SATNAMPAL <span>Singh</span></div>
