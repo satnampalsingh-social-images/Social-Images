@@ -14,20 +14,20 @@ LA = f"{FONTS}/lato-latin"
 
 d = json.loads(sys.argv[1]); out = sys.argv[2]
 e = lambda s: html.escape(s or "")
-check = '<svg viewBox="0 0 24 24" width="34" height="34"><circle cx="12" cy="12" r="11" fill="#e8323a"/><path d="M7 12.5l3.2 3.2L17 9" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+check = '<svg viewBox="0 0 24 24" width="34" height="34"><circle cx="12" cy="12" r="11" fill="#ED1C24"/><path d="M7 12.5l3.2 3.2L17 9" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>'
 pts = "".join(f'<li>{check}<span>{e(p)}</span></li>' for p in d.get("points", [])[:3])
 
-# Brand palette (from business card): bright red, white, gold gradient, charcoal
-RED, RED_D, GOLD_L, GOLD_D, INK = "#e8323a", "#b8202a", "#f4eb8d", "#b07a3c", "#31312f"
+# Brand palette (Satnampal, Nov 2026): red #ED1C24, gold #C79A3B, charcoal #252525, white, light grey
+RED, RED_D, GOLD_L, GOLD_D, INK = "#ED1C24", "#C4161D", "#E8CF8E", "#A57E2C", "#252525"
 
 # keyhole crest mark
-crest = f'''<svg viewBox="0 0 64 64" width="62" height="62"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="{GOLD_L}"/><stop offset=".5" stop-color="#d9b25e"/><stop offset="1" stop-color="{GOLD_D}"/></linearGradient></defs>
+crest = f'''<svg viewBox="0 0 64 64" width="62" height="62"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="{GOLD_L}"/><stop offset=".5" stop-color="#C79A3B"/><stop offset="1" stop-color="{GOLD_D}"/></linearGradient></defs>
 <path d="M14 14l6-8 6 6 6-9 6 9 6-6 6 8" fill="none" stroke="url(#g)" stroke-width="3" stroke-linejoin="round"/>
 <circle cx="32" cy="36" r="20" fill="none" stroke="url(#g)" stroke-width="3.5"/>
 <circle cx="32" cy="32" r="6" fill="{INK}"/><path d="M29 35h6l2 12H27z" fill="{INK}"/></svg>'''
 
 # house + key line illustration
-house = f'''<svg viewBox="0 0 400 360" width="400" height="360"><defs><linearGradient id="h" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e2c463"/><stop offset="1" stop-color="{GOLD_D}"/></linearGradient></defs>
+house = f'''<svg viewBox="0 0 400 360" width="400" height="360"><defs><linearGradient id="h" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#D6B25E"/><stop offset="1" stop-color="{GOLD_D}"/></linearGradient></defs>
 <g fill="none" stroke="url(#h)" stroke-width="7" stroke-linejoin="round" stroke-linecap="round">
 <path d="M40 170L200 40l160 130"/><path d="M80 140v190h240V140"/><path d="M290 108V58h-34v22"/>
 <rect x="170" y="230" width="60" height="100" rx="4"/><rect x="105" y="190" width="50" height="50"/><rect x="245" y="190" width="50" height="50"/>
@@ -38,7 +38,7 @@ house = f'''<svg viewBox="0 0 400 360" width="400" height="360"><defs><linearGra
 phone_ic = '<svg viewBox="0 0 24 24" width="30" height="30"><path fill="#fff" d="M6.6 10.8a15.1 15.1 0 006.6 6.6l2.2-2.2a1 1 0 011-.25 11.4 11.4 0 003.6.57 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.57a1 1 0 01-.25 1z"/></svg>'
 mail_ic = '<svg viewBox="0 0 24 24" width="26" height="26"><path fill="#fff" d="M3 5h18a1 1 0 011 1v12a1 1 0 01-1 1H3a1 1 0 01-1-1V6a1 1 0 011-1zm9 7.2L4 7v1.9l8 5 8-5V7z"/></svg>'
 globe_ic = f'<svg viewBox="0 0 24 24" width="26" height="26"><g fill="none" stroke="{INK}" stroke-width="1.8"><circle cx="12" cy="12" r="9.5"/><path d="M2.5 12h19M12 2.5c3 3 3 16 0 19M12 2.5c-3 3-3 16 0 19"/></g></svg>'
-GOLDBAR = f"linear-gradient(90deg,{GOLD_D} 0%,#d9b25e 25%,{GOLD_L} 50%,#d9b25e 75%,{GOLD_D} 100%)"
+GOLDBAR = f"linear-gradient(90deg,{GOLD_D} 0%,#C79A3B 25%,{GOLD_L} 50%,#C79A3B 75%,{GOLD_D} 100%)"
 
 art = (f'<div class="house">{house}</div>' if d.get("art") == "house"
        else f'<div class="me"><img src="file://{PORTRAITS}/headshot-cutout.png"></div>')
@@ -64,28 +64,28 @@ page = f"""<html><head><style>
 body{{width:1080px;height:1080px;font-family:LA;color:{INK};position:relative;overflow:hidden;background:#fff}}
 .wedge{{position:absolute;left:0;top:0;width:38px;height:850px;background:{RED}}}
 .corner{{position:absolute;right:0;top:0;width:0;height:0;border-top:150px solid {RED};border-left:150px solid transparent}}
-.frame{{position:absolute;left:58px;right:30px;top:30px;bottom:240px;border:2px solid #e6cf8a}}
+.frame{{position:absolute;left:58px;right:30px;top:30px;bottom:240px;border:2px solid #DCC38A}}
 .brand{{position:absolute;left:84px;top:66px;display:flex;align-items:center;gap:14px}}
-.brand b{{display:block;font-family:PF;font-weight:700;font-size:27px;letter-spacing:2px;color:{INK};border-bottom:3px solid #d9b25e;padding-bottom:2px}}
+.brand b{{display:block;font-family:PF;font-weight:700;font-size:27px;letter-spacing:2px;color:{INK};border-bottom:3px solid #C79A3B;padding-bottom:2px}}
 .brand i{{display:block;font-style:normal;font-family:PF;font-weight:700;font-size:15px;letter-spacing:3.5px;color:{INK};margin-top:4px}}
 .motto{{position:absolute;right:170px;top:86px;font-family:PF;font-style:italic;font-weight:700;font-size:24px;color:{INK}}}
 .tag{{position:absolute;left:84px;top:178px;background:{RED};color:#fff;font-weight:900;font-size:22px;letter-spacing:3px;text-transform:uppercase;padding:11px 22px;border-radius:40px}}
 h1{{font-variant-numeric:lining-nums;position:absolute;left:84px;right:84px;top:248px;font-family:PF;font-weight:900;font-size:78px;line-height:1.05;color:{INK}}}
 h1 em{{font-weight:700;font-style:italic;color:{RED}}}
 .body{{position:absolute;left:84px;width:590px;top:{d.get('subTop',540)}px}}
-.sub{{font-size:29px;line-height:1.4;color:#4a4a48}}
+.sub{{font-size:29px;line-height:1.4;color:#444444}}
 ul{{list-style:none;margin-top:22px}}
-li{{display:flex;align-items:center;gap:16px;font-size:29px;font-weight:700;line-height:1.3;margin-top:18px;background:#fbf3df;border-left:5px solid #d9b25e;padding:12px 18px;color:{INK}}}
+li{{display:flex;align-items:center;gap:16px;font-size:29px;font-weight:700;line-height:1.3;margin-top:18px;background:#F4F4F4;border-left:5px solid #C79A3B;padding:12px 18px;color:{INK}}}
 li svg{{flex:0 0 34px}}
 .house{{position:absolute;right:40px;bottom:262px;transform:scale(.85);transform-origin:bottom right}}
 .brand img{{height:100px;display:block}}
-.me{{position:absolute;right:64px;bottom:276px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle at 50% 40%,#fff 0%,#fbf3df 100%);border:9px solid {RED};box-shadow:0 0 0 6px #e6cf8a,0 14px 30px rgba(0,0,0,.18);overflow:hidden}}
+.me{{position:absolute;right:64px;bottom:276px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle at 50% 40%,#fff 0%,#F4F4F4 100%);border:9px solid {RED};box-shadow:0 0 0 6px #DCC38A,0 14px 30px rgba(0,0,0,.18);overflow:hidden}}
 .me img{{position:absolute;left:50%;bottom:0;width:112%;transform:translateX(-50%)}}
 .redband{{position:absolute;left:0;right:0;bottom:70px;height:170px;background:{RED};display:flex;align-items:center;justify-content:space-between;padding:0 44px 0 70px;color:#fff}}
 .redband:before{{content:'';position:absolute;left:0;right:0;top:0;height:6px;background:{GOLDBAR}}}
 .name{{font-family:PF;font-weight:900;font-size:46px;letter-spacing:1px;line-height:1}}
 .name span{{font-style:italic;font-weight:700;color:#ffe2e3}}
-.role{{font-size:18px;font-weight:700;letter-spacing:1.5px;margin-top:10px;text-transform:uppercase}}
+.role{{font-size:15.5px;font-weight:700;letter-spacing:1px;margin-top:10px;text-transform:uppercase;white-space:nowrap}}
 .cta{{display:inline-block;margin-top:12px;background:#fff;color:{RED};font-weight:900;font-size:17px;letter-spacing:2px;text-transform:uppercase;padding:7px 16px;border-radius:30px}}
 .contact{{text-align:left}}
 .row{{display:flex;align-items:center;gap:12px}}
@@ -94,17 +94,17 @@ li svg{{flex:0 0 34px}}
 .mail{{font-size:23px;font-weight:700;margin-top:8px}}
 .goldbar{{position:absolute;left:0;right:0;bottom:0;height:70px;background:{GOLDBAR};display:flex;align-items:center;justify-content:center;gap:14px;font-family:PF;font-weight:700;font-size:27px;color:{INK}}}
 .goldbar .sep{{opacity:.7}}
-.hero{{position:absolute;left:84px;width:610px;top:{d.get('subTop',360)}px;display:flex;align-items:center;gap:22px;background:linear-gradient(135deg,#fff5f5,#fbf3df);border:2px solid #e6cf8a;border-left:10px solid {RED};padding:14px 24px}}
+.hero{{position:absolute;left:84px;width:610px;top:{d.get('subTop',360)}px;display:flex;align-items:center;gap:22px;background:linear-gradient(135deg,#fff5f5,#F4F4F4);border:2px solid #DCC38A;border-left:10px solid {RED};padding:14px 24px}}
 .hv{{font-variant-numeric:lining-nums;font-family:PF;font-weight:900;font-size:122px;line-height:1;color:{RED};letter-spacing:-3px}}
 .hl b{{display:block;font-size:27px;font-weight:900;line-height:1.2;color:{INK}}}
-.hl span{{display:block;font-size:21px;color:#6a6a66;margin-top:6px}}
+.hl span{{display:block;font-size:21px;color:#666666;margin-top:6px}}
 .cards{{position:absolute;left:84px;width:610px;top:{d.get('subTop',360)+200}px;display:flex;gap:14px}}
-.sc{{flex:1;background:{INK};color:#fff;border-radius:14px;padding:16px 14px 14px;text-align:center;border-top:6px solid #d9b25e}}
+.sc{{flex:1;background:{INK};color:#fff;border-radius:14px;padding:16px 14px 14px;text-align:center;border-top:6px solid #C79A3B}}
 .sv{{font-variant-numeric:lining-nums;font-family:PF;font-weight:900;font-size:40px;line-height:1.05}}
-.sl{{font-size:18px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#f4eb8d;margin-top:6px}}
+.sl{{font-size:18px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#E8CF8E;margin-top:6px}}
 .sd{{display:inline-block;margin-top:9px;font-size:20px;font-weight:900;padding:4px 12px;border-radius:20px;background:{RED}}}
 .sd.up{{background:#2f8f4e}}
-.take{{position:absolute;left:84px;width:610px;top:{d.get('subTop',360)+380}px;font-size:25px;line-height:1.35;color:#4a4a48}}
+.take{{position:absolute;left:84px;width:610px;top:{d.get('subTop',360)+380}px;font-size:25px;line-height:1.35;color:#444444}}
 .take b{{color:{RED}}}
 </style></head><body>
 <div class="wedge"></div><div class="corner"></div><div class="frame"></div>
@@ -116,7 +116,7 @@ li svg{{flex:0 0 34px}}
 {art}
 <div class="redband">
   <div><div class="name">SATNAMPAL <span>Singh</span></div>
-  <div class="role">Sales Representative · Gold Club Award Winner</div>
+  <div class="role">Real Estate Sales Representative · Gold Club Award Winner</div>
   <div class="cta">{e(d.get('cta','Book a free call'))}</div></div>
   <div class="contact"><div class="row">{phone_ic}<div class="phone"><small>Dir:</small> 647-780-2560</div></div>
   <div class="row mail">{mail_ic}ssingh@royalcanadianrealty.com</div></div>

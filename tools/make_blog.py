@@ -65,7 +65,7 @@ OFFICES = [
 HOURS = "Mon–Fri 9am–6pm · Sat 11am–6pm · Sun 10am–5pm"
 AREAS = ["Toronto", "Brampton", "Mississauga", "Peel", "York", "Durham", "Halton", "Hamilton", "Waterloo Region"]
 
-RED, RED_D, RED_DD, GOLD_L, GOLD, GOLD_D, INK, SOFT = "#e8323a", "#b8202a", "#9c1a22", "#f4eb8d", "#d9b25e", "#b07a3c", "#31312f", "#faf6ee"
+RED, RED_D, RED_DD, GOLD_L, GOLD, GOLD_D, INK, SOFT = "#ED1C24", "#C4161D", "#B3141B", "#E8CF8E", "#C79A3B", "#A57E2C", "#252525", "#F5F5F5"
 
 
 def maps(o):
@@ -82,7 +82,7 @@ CREST = (f'<svg viewBox="0 0 64 64" width="28" height="28" aria-hidden="true"><d
          f'<path d="M28 31h8l2 14H26z" fill="url(#cg)"/></svg>')
 
 CSS = """
-:root{--red:#e8323a;--red-d:#b8202a;--red-dd:#9c1a22;--gold-l:#f4eb8d;--gold:#d9b25e;--gold-d:#b07a3c;--ink:#31312f;--muted:#5d5d59;--bg:#ffffff;--soft:#faf6ee;--line:#e8e1d2}
+:root{--red:#ED1C24;--red-d:#C4161D;--red-dd:#B3141B;--gold-l:#E8CF8E;--gold:#C79A3B;--gold-d:#A57E2C;--ink:#252525;--muted:#5A5A5A;--bg:#ffffff;--soft:#F5F5F5;--line:#E2E2E2}
 *{box-sizing:border-box}html{scroll-behavior:smooth}
 body{margin:0;background:var(--bg);color:var(--ink);font:400 18px/1.7 Lato,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
 a{color:var(--red-d)}a:hover{color:var(--red-dd)}
@@ -94,7 +94,7 @@ header.top img{height:46px;width:auto;display:block}
 header.top .tag{font:italic 700 16px 'Playfair Display',Georgia,serif;color:var(--gold-d)}
 header.top .call{background:var(--red);color:#fff;text-decoration:none;font-weight:700;padding:10px 16px;border-radius:999px;font-size:15px;white-space:nowrap}
 header.top .call:hover{background:var(--red-d);color:#fff}
-.hero{background:radial-gradient(900px 360px at 12% -10%,rgba(217,178,94,.35),transparent 60%),linear-gradient(150deg,var(--red-d),var(--red-dd) 70%,#7d1219);color:#fff;padding:58px 0 50px}
+.hero{background:radial-gradient(900px 360px at 12% -10%,rgba(217,178,94,.35),transparent 60%),linear-gradient(150deg,var(--red-d),var(--red-dd) 70%,#8E1015);color:#fff;padding:58px 0 50px}
 .hero .cat{display:inline-block;background:linear-gradient(90deg,var(--gold-d),var(--gold-l));color:var(--ink);font-weight:900;font-size:13px;letter-spacing:.08em;text-transform:uppercase;padding:5px 12px;border-radius:4px}
 .hero h1{font:900 clamp(32px,5.5vw,48px)/1.15 'Playfair Display',Georgia,serif;margin:16px 0 14px;color:#fff}
 .hero p.sub{font-size:20px;margin:0;color:#fff;max-width:62ch}
@@ -171,19 +171,19 @@ ol.steps li::before{content:counter(s);position:absolute;left:0;top:8px;width:34
 .offices{background:var(--ink);color:#fff;margin-top:44px;padding:40px 0 10px}
 .offices .in{max-width:1100px;margin:0 auto;padding:0 20px}
 .offices h2{font:900 28px 'Playfair Display',Georgia,serif;color:#fff;margin:0 0 4px}
-.offices .lead{color:#e9e6dc;margin:0 0 18px}
+.offices .lead{color:#E6E6E6;margin:0 0 18px}
 .ogrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
-.o{border:1px solid #57574f;border-top:4px solid var(--gold);border-radius:10px;padding:16px;background:#3a3a37}
+.o{border:1px solid #555555;border-top:4px solid var(--gold);border-radius:10px;padding:16px;background:#333333}
 .o h3{font:700 18px 'Playfair Display',Georgia,serif;color:var(--gold-l);margin:0 0 4px}
-.o .r{font-size:13px;color:#e9e6dc;margin-bottom:8px}
+.o .r{font-size:13px;color:#E6E6E6;margin-bottom:8px}
 .o address{font-style:normal;font-size:15px;color:#fff;line-height:1.5}
 .o a{color:#fff;font-size:14px}
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0 6px}
 .chips span{border:1px solid var(--gold-d);color:var(--gold-l);border-radius:999px;padding:4px 12px;font-size:14px}
-footer.site{background:#262624;color:#fff;padding:26px 0 90px;font-size:15px}
+footer.site{background:#1E1E1E;color:#fff;padding:26px 0 90px;font-size:15px}
 footer.site .in{max-width:1100px;margin:0 auto;padding:0 20px}
 footer.site a{color:#fff}
-footer.site .legal{margin-top:16px;padding-top:14px;border-top:1px solid #4a4a45;color:#d8d8d2;font-size:13px}
+footer.site .legal{margin-top:16px;padding-top:14px;border-top:1px solid #444444;color:#D6D6D6;font-size:13px}
 .mbar{position:fixed;left:0;right:0;bottom:0;display:none;gap:8px;padding:10px 12px;background:#fff;border-top:3px solid var(--red);z-index:15;box-shadow:0 -4px 14px rgba(0,0,0,.08)}
 .mbar a{flex:1;text-align:center;text-decoration:none;font-weight:900;padding:11px 8px;border-radius:999px;font-size:15px}
 .mbar a.p{background:var(--red);color:#fff}.mbar a.s{border:2px solid var(--red);color:var(--red-d)}
@@ -382,9 +382,9 @@ def boldtrail_fragment(a, cover):
     """Body-only HTML with inline styles, for pasting into BoldTrail > Web & IDX > Blog (Source/HTML view)."""
     h2 = f'style="font-family:Georgia,serif;color:{INK};border-bottom:3px solid {RED};padding-bottom:6px;margin:32px 0 12px"'
     lab = f'style="font-size:12px;font-weight:bold;letter-spacing:.1em;color:{RED};margin:28px 0 0"'
-    stats = "".join(f'<td style="padding:6px;vertical-align:top"><div style="border:1px solid #e8e1d2;border-top:5px solid {RED};border-radius:10px;padding:12px 14px">'
+    stats = "".join(f'<td style="padding:6px;vertical-align:top"><div style="border:1px solid #E2E2E2;border-top:5px solid {RED};border-radius:10px;padding:12px 14px">'
                     f'<div style="font-family:Georgia,serif;font-weight:bold;font-size:26px;color:{RED_DD}">{e(s["value"])}</div>'
-                    f'<div style="font-size:14px;color:#5d5d59">{e(s["label"])}</div></div></td>' for s in a.get("stats", [])[:4])
+                    f'<div style="font-size:14px;color:#5A5A5A">{e(s["label"])}</div></div></td>' for s in a.get("stats", [])[:4])
     take = "".join(f"<li>{e(t)}</li>" for t in a["takeaways"])
 
     def inline(h):  # turn design-helper classes into inline styles BoldTrail keeps
@@ -392,12 +392,12 @@ def boldtrail_fragment(a, cover):
             '<div class="callout">': f'<div style="border-left:5px solid {GOLD_D};background:#fff;padding:14px 18px;border-radius:6px;margin:18px 0;box-shadow:0 2px 8px rgba(0,0,0,.06)">',
             '<div class="cards">': '<div style="display:flex;flex-wrap:wrap;gap:12px;margin:18px 0">',
             '<div class="c featured">': f'<div style="flex:1 1 200px;background:{RED_D};color:#fff;border-top:5px solid {GOLD_L};border-radius:10px;padding:16px">',
-            '<div class="c">': f'<div style="flex:1 1 200px;background:#fff;border:1px solid #e8e1d2;border-top:5px solid {GOLD_D};border-radius:10px;padding:16px">',
+            '<div class="c">': f'<div style="flex:1 1 200px;background:#fff;border:1px solid #E2E2E2;border-top:5px solid {GOLD_D};border-radius:10px;padding:16px">',
             '<span class="tag">': f'<span style="font-size:12px;font-weight:bold;letter-spacing:.08em;color:{RED}">',
             '<div class="big">': '<div style="font-family:Georgia,serif;font-weight:bold;font-size:24px;margin:4px 0">',
             '<ol class="steps">': '<ol style="padding-left:24px">',
             '<th>': f'<th style="background:{RED_D};color:#fff;text-align:left;padding:8px 10px">',
-            '<td>': '<td style="padding:8px 10px;border-bottom:1px solid #e8e1d2">',
+            '<td>': '<td style="padding:8px 10px;border-bottom:1px solid #E2E2E2">',
             '<table>': '<table style="width:100%;border-collapse:collapse;margin:16px 0;font-size:15px">',
         }
         for k, v in rep.items():
@@ -408,7 +408,7 @@ def boldtrail_fragment(a, cover):
         secs += (f'<p {lab}>{e(s["label"])}</p>' if s.get("label") else "") + f'<h2 {h2}>{e(s["h2"])}</h2>{inline(s["html"])}'
         if s.get("chart"):
             secs += (f'<p style="font-family:Georgia,serif;font-weight:bold;margin:18px 0 0">{e(s["chart"]["title"])}</p>'
-                     f'<div style="border:1px solid #e8e1d2;border-radius:10px;padding:10px;margin:6px 0 18px">{chart_svg(s["chart"], "bt" + str(i))}</div>')
+                     f'<div style="border:1px solid #E2E2E2;border-radius:10px;padding:10px;margin:6px 0 18px">{chart_svg(s["chart"], "bt" + str(i))}</div>')
     faq = "".join(f'<h3 style="font-family:Georgia,serif;color:{RED_D};margin:18px 0 6px">{e(f["q"])}</h3><p>{e(f["a"])}</p>' for f in a["faq"])
     srcs = "".join(f'<li><a href="{e(s["url"])}" target="_blank" rel="noopener">{e(s["name"])}</a></li>' for s in a.get("sources", []))
     offs = "".join(f'<td style="padding:6px;vertical-align:top;width:20%"><div style="border-top:4px solid {GOLD};padding:8px 0;font-size:14px">'
@@ -420,7 +420,7 @@ def boldtrail_fragment(a, cover):
             f'<div style="font-family:Lato,Arial,sans-serif;color:{INK};line-height:1.7;font-size:17px">'
             f'<p style="margin:0"><span style="display:inline-block;background:{GOLD_D};color:#fff;font-weight:bold;font-size:13px;letter-spacing:.08em;padding:4px 10px;border-radius:4px">{e(a["category"].upper())}</span></p>'
             f'<h1 style="font-family:Georgia,serif;color:{RED_DD};font-size:34px;line-height:1.2;margin:12px 0 8px">{e(a["title"])}</h1>'
-            f'<p style="font-size:14px;color:#5d5d59;margin:0 0 16px">By {AGENT["name"]}, {AGENT["title"]}, {AGENT["brokerage"]} · {datetime.date.fromisoformat(a["date"]).strftime("%B %-d, %Y")}</p>'
+            f'<p style="font-size:14px;color:#5A5A5A;margin:0 0 16px">By {AGENT["name"]}, {AGENT["title"]}, {AGENT["brokerage"]} · {datetime.date.fromisoformat(a["date"]).strftime("%B %-d, %Y")}</p>'
             f'<p><img src="{cover}" alt="{e(a["title"])}" style="max-width:100%;height:auto;border-radius:8px"></p>'
             f'<p style="font-size:19px"><strong>{e(a["hero_sub"])}</strong></p>'
             + (f'<table style="width:100%;border-collapse:separate"><tr>{stats}</tr></table>' if stats else "") +
@@ -435,7 +435,7 @@ def boldtrail_fragment(a, cover):
             f'<p style="font-family:Georgia,serif;font-weight:bold;font-size:20px;margin:24px 0 4px">Royal Canadian Realty offices</p>'
             f'<table style="width:100%;border-collapse:collapse"><tr>{offs}</tr></table>'
             + (f'<p style="font-size:14px"><strong>Sources</strong></p><ul style="font-size:14px">{srcs}</ul>' if srcs else "") +
-            f'<p style="font-size:13px;color:#5d5d59">{AGENT["name"]}, {AGENT["title"]} | {AGENT["brokerage"]} | Gold Club Award Winner · Believe In The Best. '
+            f'<p style="font-size:13px;color:#5A5A5A">{AGENT["name"]}, {AGENT["title"]} | {AGENT["brokerage"]} | Gold Club Award Winner · Believe In The Best. '
             f'General information only, not financial, legal or tax advice. Scenarios are illustrations.</p></div>\n'
             f'<script type="application/ld+json">{faq_ld}</script>\n')
 

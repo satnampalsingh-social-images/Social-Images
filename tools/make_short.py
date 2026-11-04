@@ -22,8 +22,8 @@ PHOTOS = os.path.join(ROOT, "assets", "photos")
 BRAND = os.path.join(ROOT, "assets", "brand")
 FONTS = os.path.join(HERE, "fonts")
 PF, LA = f"{FONTS}/playfair-display-latin", f"{FONTS}/lato-latin"
-RED, GOLD_L, GOLD_D, INK = "#e8323a", "#f4eb8d", "#b07a3c", "#31312f"
-GOLDBAR = f"linear-gradient(90deg,{GOLD_D} 0%,#d9b25e 25%,{GOLD_L} 50%,#d9b25e 75%,{GOLD_D} 100%)"
+RED, GOLD_L, GOLD_D, INK = "#ED1C24", "#E8CF8E", "#A57E2C", "#252525"
+GOLDBAR = f"linear-gradient(90deg,{GOLD_D} 0%,#C79A3B 25%,{GOLD_L} 50%,#C79A3B 75%,{GOLD_D} 100%)"
 W, H, FPS = 1080, 1920, 30
 
 d = json.loads(sys.argv[1]); out = sys.argv[2]
@@ -33,7 +33,7 @@ pool = sorted(f for f in os.listdir(PHOTOS) if f.lower().endswith((".jpg", ".jpe
 photos = d.get("photos") or (lambda p: (p * 4)[:4])(random.sample(pool, len(pool)))
 headshot = os.path.join(PHOTOS, "headshot.jpg")
 
-crest = f'''<svg viewBox="0 0 64 64" width="58" height="58"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="{GOLD_L}"/><stop offset=".5" stop-color="#d9b25e"/><stop offset="1" stop-color="{GOLD_D}"/></linearGradient></defs>
+crest = f'''<svg viewBox="0 0 64 64" width="58" height="58"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="{GOLD_L}"/><stop offset=".5" stop-color="#C79A3B"/><stop offset="1" stop-color="{GOLD_D}"/></linearGradient></defs>
 <path d="M14 14l6-8 6 6 6-9 6 9 6-6 6 8" fill="none" stroke="url(#g)" stroke-width="3.4" stroke-linejoin="round"/>
 <circle cx="32" cy="36" r="20" fill="none" stroke="url(#g)" stroke-width="3.8"/>
 <circle cx="32" cy="32" r="6" fill="#fff"/><path d="M29 35h6l2 12H27z" fill="#fff"/></svg>'''
@@ -50,7 +50,7 @@ html,body{{background:transparent}}
 body{{width:{W}px;height:{H}px;font-family:LA;position:relative;overflow:hidden;font-variant-numeric:lining-nums;color:#fff}}
 .shade{{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.55) 0%,rgba(0,0,0,0) 18%,rgba(0,0,0,0) 38%,rgba(0,0,0,.78) 60%,rgba(0,0,0,.88) 100%)}}
 .brand{{position:absolute;left:60px;top:90px;display:flex;align-items:center;gap:14px;text-shadow:0 2px 8px rgba(0,0,0,.5)}}
-.brand b{{display:block;font-family:PF;font-weight:700;font-size:30px;letter-spacing:3px;border-bottom:3px solid #d9b25e;padding-bottom:2px}}
+.brand b{{display:block;font-family:PF;font-weight:700;font-size:30px;letter-spacing:3px;border-bottom:3px solid #C79A3B;padding-bottom:2px}}
 .brand i{{display:block;font-style:normal;font-family:PF;font-weight:700;font-size:17px;letter-spacing:4px;margin-top:5px}}
 .who{{position:absolute;right:60px;top:96px;text-align:right;text-shadow:0 2px 8px rgba(0,0,0,.6)}}
 .who b{{display:block;font-family:PF;font-weight:900;font-size:34px}}
@@ -70,7 +70,7 @@ h2{{font-family:PF;font-weight:900;font-size:82px;line-height:1.05;margin-top:22
 .cta-bg{{position:absolute;inset:0;background:#fff}}
 .cta-bg:before{{content:'';position:absolute;left:0;top:0;width:40px;height:100%;background:{RED}}}
 .cta-bg:after{{content:'';position:absolute;right:0;top:0;border-top:200px solid {RED};border-left:200px solid transparent}}
-.photo{{position:absolute;left:50%;top:150px;transform:translateX(-50%);width:560px;height:560px;border-radius:50%;overflow:hidden;border:12px solid {RED};box-shadow:0 0 0 8px #e6cf8a,0 18px 40px rgba(0,0,0,.25)}}
+.photo{{position:absolute;left:50%;top:150px;transform:translateX(-50%);width:560px;height:560px;border-radius:50%;overflow:hidden;border:12px solid {RED};box-shadow:0 0 0 8px #DCC38A,0 18px 40px rgba(0,0,0,.25)}}
 .photo img{{width:100%;height:100%;object-fit:cover;object-position:50% 20%}}
 .c{{position:absolute;left:80px;right:80px;text-align:center;color:{INK}}}
 .cname{{font-family:PF;font-weight:900;font-size:86px;line-height:1}}
