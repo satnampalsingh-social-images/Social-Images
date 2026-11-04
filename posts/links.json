@@ -1,19 +1,19 @@
 {
   "_note": "Landing page for each post theme. The daily-post and YouTube Short scheduled tasks pick the link from here. To send people to a more specific page, replace the URL for that theme (keep the full https:// address). 'pages' can hold extra topic pages (e.g. a blog article) keyed by a short topic name; a task uses a 'pages' entry when today's topic clearly matches it, otherwise the theme link.",
   "themes": {
-    "zero-down": "https://www.findyourhouseingta.com/",
-    "first-time-buyer": "https://www.findyourhouseingta.com/",
-    "neighbourhood": "https://www.findyourhouseingta.com/",
-    "market-update": "https://www.findyourhouseingta.com/",
-    "buyer-tip": "https://www.findyourhouseingta.com/",
-    "mortgage": "https://www.findyourhouseingta.com/",
-    "investor": "https://www.findyourhouseingta.com/",
-    "myth-faq": "https://www.findyourhouseingta.com/",
+    "zero-down": "https://satnampalsingh-social-images.github.io/Social-Images/blog/",
+    "first-time-buyer": "https://satnampalsingh-social-images.github.io/Social-Images/blog/",
+    "neighbourhood": "https://satnampalsingh-social-images.github.io/Social-Images/blog/",
+    "market-update": "https://satnampalsingh-social-images.github.io/Social-Images/blog/gta-market-update-october-2026/",
+    "buyer-tip": "https://satnampalsingh-social-images.github.io/Social-Images/blog/",
+    "mortgage": "https://satnampalsingh-social-images.github.io/Social-Images/blog/",
+    "investor": "https://satnampalsingh-social-images.github.io/Social-Images/blog/",
+    "myth-faq": "https://satnampalsingh-social-images.github.io/Social-Images/blog/",
     "seller": "https://www.dreamhomeseller.ca/",
-    "default": "https://www.findyourhouseingta.com/"
+    "default": "https://satnampalsingh-social-images.github.io/Social-Images/blog/"
   },
   "pages": {
-    "fhsa-rrsp-home-buyers-plan-brampton-2026": "https://www.findyourhouseingta.com/blog.php",
-    "gta-market-update-october-2026": "https://www.findyourhouseingta.com/blog.php"
+    "fhsa-rrsp-home-buyers-plan-brampton-2026": "https://satnampalsingh-social-images.github.io/Social-Images/blog/fhsa-rrsp-home-buyers-plan-brampton-2026/",
+    "gta-market-update-october-2026": "https://satnampalsingh-social-images.github.io/Social-Images/blog/gta-market-update-october-2026/"
   }
 }
