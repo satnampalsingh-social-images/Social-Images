@@ -28,3 +28,11 @@ Good for social-proof posts as-is.
 
 ## assets/videos — his own footage
 - seller-marketing-reel.mp4 — 47 s vertical reel (1080x1920, HEVC): open-house signs, staging, showing the home; captions "Open House Exposure", "Active Property Marketing", "Connecting with BUYERS!", ends "Thinking of SELLING? DM 'SELL'". Captions are burned in.
+
+## Colour themes (tools/make_post_image.py "theme" key)
+All from his brand palette (red #ED1C24, gold #C79A3B, charcoal #252525, white, light grey). Rotate them so feeds don't look the same every day; see assets/samples/themes-overview.jpg.
+- charcoal (default): charcoal background, white text, gold accents.
+- red: red gradient, white text, pale-gold accents, charcoal pills/number dots.
+- gold: gold gradient, charcoal text, red accents, black logo.
+- light: white/light-grey background, charcoal text, red accents, gold logo.
+split + question: all four. bold: red (default) | charcoal | gold. photo: charcoal | red | gold (colour of the shading behind the text).

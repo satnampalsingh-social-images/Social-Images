@@ -1,6 +1,8 @@
 """Render a branded 1080x1080 real-estate post image (business-card palette: red, white, gold).
 Usage: python3 make_post_image.py '<json>' out.png
-JSON keys: tag, headline (may use <em>..</em> for red italic), sub, points (<=3), cta, subTop,\n  art: "headshot" (default; his photo in a gold ring, bottom right) or "house" (line illustration)\n  Portrait layouts (1080x1350, 4:5, best for IG/FB feeds):\n    "photo":    full-bleed photo of Satnampal (photo: autumn-suit-full.jpg | staircase-pose.jpg | silver-club-award-2023.jpg; photoY e.g. "18%"), tag, headline, sub, cta\n    "split":    charcoal text panel + photo column (photo: listing-facing.jpg | listing-gesture.jpg | luxury-home.jpg | any assets/photos file), tag, headline, sub, points (3), cta\n    "bold":     red myth-vs-fact card, no photo: tag, headline, myth, fact, cta\n    "question": charcoal poll/question, no photo: tag, headline, sub, options (3), cta\n    optional "size" overrides the headline font size\n  layout: "stats" (optional, for market updates): hero {value,label,note}, stats [{value,label,change,dir:"down"|"up"}] (3), takeaway\nTop-left uses the official Royal Canadian Realty logo from assets/brand/logo-gold.png.
+JSON keys: tag, headline (may use <em>..</em> for red italic), sub, points (<=3), cta, subTop,\n  art: "headshot" (default; his photo in a gold ring, bottom right) or "house" (line illustration)\n  Portrait layouts (1080x1350, 4:5, best for IG/FB feeds):\n    "photo":    full-bleed photo of Satnampal (photo: autumn-suit-full.jpg | staircase-pose.jpg | silver-club-award-2023.jpg; photoY e.g. "18%"), tag, headline, sub, cta\n    "split":    charcoal text panel + photo column (photo: listing-facing.jpg | listing-gesture.jpg | luxury-home.jpg | any assets/photos file), tag, headline, sub, points (3), cta\n    "bold":     red myth-vs-fact card, no photo: tag, headline, myth, fact, cta\n    "question": charcoal poll/question, no photo: tag, headline, sub, options (3), cta\n    optional "size" overrides the headline font size
+    optional "theme" (brand colour scheme): "charcoal" (default) | "red" (red gradient) | "gold" (gold gradient, charcoal text) | "light" (white/light grey)
+      split + question use all four; bold uses red (default) | charcoal | gold; photo uses charcoal (default) | red | gold for the shading behind the text\n  layout: "stats" (optional, for market updates): hero {value,label,note}, stats [{value,label,change,dir:"down"|"up"}] (3), takeaway\nTop-left uses the official Royal Canadian Realty logo from assets/brand/logo-gold.png.
 """
 import json, sys, html, asyncio, os, tempfile
 from playwright.async_api import async_playwright
@@ -137,6 +139,20 @@ lay = d.get("layout", "")
 if lay in ("photo", "split", "bold", "question"):
     H = 1350
     GOLD = "#C79A3B"
+    # Colour themes (all from his brand palette). "theme" key: charcoal | red | gold | light
+    GOLDGRAD = f"linear-gradient(135deg,{GOLD_D} 0%,#C79A3B 40%,{GOLD_L} 75%,#C79A3B 100%)"
+    REDGRAD = f"linear-gradient(160deg,{RED} 0%,{RED_D} 100%)"
+    THEMES = {
+      "charcoal": dict(bg=INK, fg="#fff", sub="#d8d8d8", em=GOLD, pill=RED, dot=RED, dotfg="#fff", stripe=RED, logo="logo-white.png",
+                       ctabg="#fff", ctafg=RED, opbg="#333", opbd="#4a4a4a", glyph=GOLD, shade="20,20,20"),
+      "red":      dict(bg=REDGRAD, fg="#fff", sub="#ffe3e4", em="#FFE7A8", pill=INK, dot=INK, dotfg=GOLD_L, stripe=GOLD, logo="logo-white.png",
+                       ctabg="#fff", ctafg=RED, opbg="rgba(0,0,0,.18)", opbd="rgba(255,255,255,.35)", glyph="#fff", shade="150,14,20"),
+      "gold":     dict(bg=GOLDGRAD, fg=INK, sub="#3a3226", em=RED, pill=RED, dot=INK, dotfg=GOLD_L, stripe=INK, logo="logo-black.png",
+                       ctabg=INK, ctafg="#fff", opbg="rgba(255,255,255,.55)", opbd="rgba(37,37,37,.25)", glyph="#fff", shade="120,90,30"),
+      "light":    dict(bg="linear-gradient(180deg,#FFFFFF 0%,#EFEFEF 100%)", fg=INK, sub="#555", em=RED, pill=RED, dot=RED, dotfg="#fff", stripe=GOLD, logo="logo-gold.png",
+                       ctabg=RED, ctafg="#fff", opbg="#fff", opbd="#DCC38A", glyph=RED, shade="20,20,20"),
+    }
+    T = THEMES.get(d.get("theme", "charcoal"), THEMES["charcoal"])
     foot = f"""<div class="ft"><div><div class="nm">SATNAMPAL <i>Singh</i></div>
 <div class="rl">Real Estate Sales Representative · Royal Canadian Realty, Brokerage</div></div>
 <div class="ct"><div class="ph">647-780-2560</div><div class="wb">FindYourHouseInGTA.com</div></div></div><div class="gb"></div>"""
@@ -158,9 +174,9 @@ h1{{font-family:PF;font-weight:900;line-height:1.04;font-variant-numeric:lining-
         img = d.get("photo", "staircase-pose.jpg")
         body = f"""<style>{base}
 .bg{{position:absolute;inset:0 0 164px 0;background:url(file://{PHOTOS}/{img}) center {d.get('photoY','18%')}/cover}}
-.sh{{position:absolute;inset:0 0 164px 0;background:linear-gradient(180deg,rgba(0,0,0,.55) 0%,rgba(0,0,0,0) 22%,rgba(0,0,0,0) 40%,rgba(20,20,20,.88) 66%,rgba(20,20,20,.97) 100%)}}
+.sh{{position:absolute;inset:0 0 164px 0;background:linear-gradient(180deg,rgba(0,0,0,.55) 0%,rgba(0,0,0,0) 22%,rgba(0,0,0,0) 40%,rgba({T['shade']},.88) 66%,rgba({T['shade']},.97) 100%)}}
 .tx{{position:absolute;left:56px;right:56px;bottom:200px;color:#fff}}
-.tx h1{{font-size:{d.get('size',88)}px;margin:22px 0 18px;text-shadow:0 3px 14px rgba(0,0,0,.4)}} .tx h1 em{{font-style:italic;font-weight:700;color:{GOLD}}}
+.tx h1{{font-size:{d.get('size',88)}px;margin:22px 0 18px;text-shadow:0 3px 14px rgba(0,0,0,.4)}} .tx h1 em{{font-style:italic;font-weight:700;color:{T['em'] if d.get('theme') in ('red',) else GOLD}}}
 .tx p{{font-size:32px;line-height:1.35;color:#f1f1f1;max-width:900px;margin-bottom:28px}}
 </style><div class="bg"></div><div class="sh"></div><img class="logo" src="file://{BRAND}/logo-white.png">
 <div class="tx"><span class="pill">{e(d.get('tag'))}</span><h1>{d.get('headline','')}</h1><p>{e(d.get('sub'))}</p><span class="cta">{e(d.get('cta','Book a free call'))}</span></div>{foot}"""
@@ -168,42 +184,45 @@ h1{{font-family:PF;font-weight:900;line-height:1.04;font-variant-numeric:lining-
         img = d.get("photo", "listing-facing.jpg")
         lis = "".join(f'<li><b>{i+1}</b><span>{e(x)}</span></li>' for i, x in enumerate(d.get("points", [])[:3]))
         body = f"""<style>{base}
-body{{background:{INK}}}
+body{{background:{T['bg']}}}
 .ph2{{position:absolute;right:0;top:0;width:440px;bottom:164px;background:url(file://{PHOTOS}/{img}) {d.get('photoX','50%')} {d.get('photoY','30%')}/cover}}
-.ph2:before{{content:'';position:absolute;left:0;top:0;bottom:0;width:10px;background:{RED}}}
-.lt{{position:absolute;left:56px;width:550px;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;top:170px;bottom:184px;color:#fff}}
-.lt h1{{font-size:{d.get('size',76)}px;margin:24px 0 18px}} .lt h1 em{{font-style:italic;font-weight:700;color:{GOLD}}}
-.lt p{{font-size:31px;line-height:1.4;color:#d8d8d8}}
+.ph2:before{{content:'';position:absolute;left:0;top:0;bottom:0;width:10px;background:{T['stripe']}}}
+.lt{{position:absolute;left:56px;width:550px;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;top:170px;bottom:184px;color:{T['fg']}}}
+.lt h1{{font-size:{d.get('size',76)}px;margin:24px 0 18px}} .lt h1 em{{font-style:italic;font-weight:700;color:{T['em']}}}
+.lt p{{font-size:31px;line-height:1.4;color:{T['sub']}}}
+.lt .pill{{background:{T['pill']}}} .lt .cta{{background:{T['ctabg']};color:{T['ctafg']}}}
 .lt ul{{list-style:none;margin:28px 0 34px}} .lt li{{display:flex;gap:18px;align-items:center;font-size:32px;font-weight:700;margin:20px 0}}
-.lt li b{{flex:0 0 52px;height:52px;border-radius:50%;background:{RED};display:flex;align-items:center;justify-content:center;font-family:PF;font-size:28px}}
-</style><img class="logo" src="file://{BRAND}/logo-white.png"><div class="ph2"></div>
+.lt li b{{flex:0 0 52px;height:52px;border-radius:50%;background:{T['dot']};color:{T['dotfg']};display:flex;align-items:center;justify-content:center;font-family:PF;font-size:28px}}
+</style><img class="logo" src="file://{BRAND}/{T['logo']}"><div class="ph2"></div>
 <div class="lt"><span class="pill">{e(d.get('tag'))}</span><h1>{d.get('headline','')}</h1><p>{e(d.get('sub'))}</p><ul>{lis}</ul><span class="cta">{e(d.get('cta','Book a free call'))}</span></div>{foot}"""
     elif lay == "bold":
+        TB = T if d.get("theme") in ("charcoal","gold") else THEMES["red"]
         body = f"""<style>{base}
-body{{background:{RED}}}
-.bx{{position:absolute;left:56px;right:56px;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;top:170px;bottom:184px;color:#fff}}
-.bx h1{{font-size:{d.get('size',92)}px;margin:26px 0 34px}} .bx h1 em{{font-style:italic;font-weight:700;color:#FFE7A8}}
+body{{background:{TB['bg']}}}
+.bx{{position:absolute;left:56px;right:56px;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;top:170px;bottom:184px;color:{TB['fg']}}}
+.bx h1{{font-size:{d.get('size',92)}px;margin:26px 0 34px}} .bx h1 em{{font-style:italic;font-weight:700;color:{TB['em']}}}
 .card{{align-self:stretch;border-radius:18px;padding:30px 34px;margin-bottom:24px;font-size:37px;line-height:1.35}}
 .card small{{display:block;font-size:20px;font-weight:900;letter-spacing:3px;margin-bottom:8px}}
-.myth{{background:rgba(0,0,0,.18);color:#ffe0e0}} .myth span{{text-decoration:line-through;text-decoration-thickness:3px}}
+.myth{{background:{'rgba(0,0,0,.18)' if TB is THEMES['red'] else TB['opbg']};color:{'#ffe0e0' if TB is THEMES['red'] else TB['fg']}}} .myth span{{text-decoration:line-through;text-decoration-thickness:3px}}
 .fact{{background:#fff;color:{INK};border-left:12px solid {GOLD}}} .fact small{{color:#1d8a4a}}
-.bx .cta{{background:{INK};color:#fff;margin-top:8px}}
-</style><img class="logo" src="file://{BRAND}/logo-white.png">
-<div class="bx"><span class="pill" style="background:{INK}">{e(d.get('tag','MYTH VS FACT'))}</span><h1>{d.get('headline','')}</h1>
+.bx .cta{{background:{INK if TB is not THEMES['charcoal'] else RED};color:#fff;margin-top:8px}}
+</style><img class="logo" src="file://{BRAND}/{TB['logo']}">
+<div class="bx"><span class="pill" style="background:{INK if TB is not THEMES['charcoal'] else RED}">{e(d.get('tag','MYTH VS FACT'))}</span><h1>{d.get('headline','')}</h1>
 <div class="card myth"><small>&#10007; MYTH</small><span>{e(d.get('myth'))}</span></div>
 <div class="card fact"><small>&#10003; FACT</small>{e(d.get('fact'))}</div><span class="cta">{e(d.get('cta','Ask me anything'))}</span></div>{foot}"""
     else:  # question
         opts = "".join(f'<div class="op"><b>{"ABC"[i]}</b>{e(x)}</div>' for i, x in enumerate(d.get("options", [])[:3]))
         body = f"""<style>{base}
-body{{background:{INK}}}
-.q{{position:absolute;right:30px;top:120px;font-family:PF;font-weight:900;font-size:560px;line-height:1;color:{GOLD};opacity:.16}}
-.qx{{position:absolute;left:56px;right:56px;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;top:170px;bottom:184px;color:#fff}}
-.qx h1{{font-size:{d.get('size',80)}px;margin:26px 0 20px}} .qx h1 em{{font-style:italic;font-weight:700;color:{GOLD}}}
-.qx p{{font-size:29px;color:#cfcfcf;margin-bottom:30px}}
-.op{{align-self:stretch;display:flex;align-items:center;gap:22px;background:#333;border:2px solid #4a4a4a;border-radius:16px;padding:20px 26px;margin:16px 0;font-size:32px;font-weight:700}}
-.op b{{flex:0 0 58px;height:58px;border-radius:50%;background:{RED};display:flex;align-items:center;justify-content:center;font-family:PF;font-size:30px}}
-.qx .cta{{margin-top:18px}}
-</style><div class="q">?</div><img class="logo" src="file://{BRAND}/logo-white.png">
+body{{background:{T['bg']}}}
+.q{{position:absolute;right:30px;top:120px;font-family:PF;font-weight:900;font-size:560px;line-height:1;color:{T['glyph']};opacity:.16}}
+.qx{{position:absolute;left:56px;right:56px;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;top:170px;bottom:184px;color:{T['fg']}}}
+.qx h1{{font-size:{d.get('size',80)}px;margin:26px 0 20px}} .qx h1 em{{font-style:italic;font-weight:700;color:{T['em']}}}
+.qx p{{font-size:29px;color:{T['sub']};margin-bottom:30px}}
+.qx .pill{{background:{T['pill']}}}
+.op{{align-self:stretch;display:flex;align-items:center;gap:22px;background:{T['opbg']};border:2px solid {T['opbd']};border-radius:16px;padding:20px 26px;margin:16px 0;font-size:32px;font-weight:700}}
+.op b{{flex:0 0 58px;height:58px;border-radius:50%;background:{T['dot']};color:{T['dotfg']};display:flex;align-items:center;justify-content:center;font-family:PF;font-size:30px}}
+.qx .cta{{margin-top:18px;background:{T['ctabg']};color:{T['ctafg']}}}
+</style><div class="q">?</div><img class="logo" src="file://{BRAND}/{T['logo']}">
 <div class="qx"><span class="pill">{e(d.get('tag','YOUR TURN'))}</span><h1>{d.get('headline','')}</h1><p>{e(d.get('sub'))}</p>{opts}<span class="cta">{e(d.get('cta','Comment A, B or C'))}</span></div>{foot}"""
     page = f"<html><head></head><body>{body}</body></html>"
 
