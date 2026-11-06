@@ -12,6 +12,7 @@ JSON keys:
   cta        gold pill text, e.g. "Book a free buyer call"
   coinTop, subTop  optional pixel positions for the coin and the sub line
   size       optional headline font size (default 74)
+  theme      "navy" (default) | "charcoal" | "red" (deep brand red with a gold ribbon): rotate daily
   format     "portrait" (1080x1350, default) or "landscape" (1200x900, for GBP)
 Footer (fixed): official Royal Canadian Realty white logo, his name, title, phone, email, website, offices.
 Never put other people, stock or AI images in "photo"; never recolour or redraw the logo.
@@ -28,6 +29,10 @@ land = d.get("format") == "landscape"
 W, H = (1200, 900) if land else (1080, 1350)
 
 NAVY, NAVY2, GOLD, GOLD_L, RED, INK = "#0E1B36", "#16294F", "#C79A3B", "#E8CF8E", "#ED1C24", "#252525"
+# Colour theme for the top band, card titles and footer ("theme" key): navy (default) | charcoal | red
+THEMES = {"navy": ("#0E1B36", "14,27,54"), "charcoal": ("#252525", "37,37,37"), "red": ("#7E0E14", "126,14,20")}
+NAVY, RGB = THEMES.get(d.get("theme", "navy"), THEMES["navy"])
+RIB_BG, RIB_FG = (GOLD, INK) if d.get("theme") == "red" else (RED, "#fff")
 ic = {
  "home": '<path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-5h4v5"/>',
  "lock": '<rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/><circle cx="12" cy="15" r="1.4"/>',
@@ -61,16 +66,16 @@ page = f"""<html><head><style>
 body{{width:{W}px;height:{H}px;overflow:hidden;font-family:LA;background:#F3F3F1;position:relative}}
 .top{{position:absolute;left:0;top:0;width:{W}px;height:{TOP}px;overflow:hidden;background:{NAVY}}}
 .top .ph{{position:absolute;right:0;top:0;width:{int(W*0.62)}px;height:100%;background:url(file://{ROOT}/assets/photos/{photo}) {d.get("photoPos","50% 35%")}/cover}}
-.top .fade{{position:absolute;inset:0;background:linear-gradient(90deg,{NAVY} 0%,{NAVY} 38%,rgba(14,27,54,.82) 55%,rgba(14,27,54,.15) 82%,rgba(14,27,54,0) 100%)}}
-.top .fade2{{position:absolute;left:0;right:0;bottom:0;height:160px;background:linear-gradient(0deg,rgba(14,27,54,.85),rgba(14,27,54,0))}}
+.top .fade{{position:absolute;inset:0;background:linear-gradient(90deg,{NAVY} 0%,{NAVY} 38%,rgba({RGB},.82) 55%,rgba({RGB},.15) 82%,rgba({RGB},0) 100%)}}
+.top .fade2{{position:absolute;left:0;right:0;bottom:0;height:160px;background:linear-gradient(0deg,rgba({RGB},.85),rgba({RGB},0))}}
 .swoosh{{position:absolute;left:0;top:{TOP-46}px;width:{W}px;height:90px}}
 .logo{{position:absolute;left:56px;top:44px;height:{70 if land else 84}px}}
 .rib{{position:absolute;left:56px;top:{150 if land else 168}px;display:flex;align-items:center;gap:18px}}
-.rib b{{background:{RED};color:#fff;font-weight:900;letter-spacing:3px;font-size:22px;padding:10px 22px;border-radius:6px;box-shadow:0 6px 18px rgba(237,28,36,.35)}}
+.rib b{{background:{RIB_BG};color:{RIB_FG};font-weight:900;letter-spacing:3px;font-size:22px;padding:10px 22px;border-radius:6px;box-shadow:0 6px 18px rgba(237,28,36,.35)}}
 .rib span{{color:{GOLD_L};font-weight:700;letter-spacing:3px;font-size:18px}}
 h1{{position:absolute;left:56px;top:{200 if land else 238}px;width:{620 if land else 640}px;color:#fff;font-family:PF;font-weight:900;font-size:{d.get("size",66 if land else 74)}px;line-height:1.06;text-shadow:0 3px 16px rgba(0,0,0,.35)}}
 h1 em{{font-style:italic;color:{GOLD};background:linear-gradient(180deg,{GOLD_L},{GOLD});-webkit-background-clip:text;color:transparent}}
-.sub{{position:absolute;left:56px;top:{d.get("subTop", 450 if land else 512)}px;width:{600 if land else 560}px;color:#E9ECF3;font-size:{24 if land else 27}px;line-height:1.38}}
+.sub{{position:absolute;left:56px;top:{d.get("subTop", 352 if land else 512)}px;width:{600 if land else 560}px;color:#E9ECF3;font-size:{24 if land else 27}px;line-height:1.38}}
 .coin{{position:absolute;transform:scale({0.8 if land else 1});transform-origin:top right;right:{40 if land else 44}px;top:{d.get("coinTop", 250 if land else 300)}px;width:250px;height:250px;border-radius:50%;
   background:radial-gradient(circle at 35% 30%,#F6E7B8 0%,{GOLD_L} 30%,{GOLD} 70%,#9A7429 100%);box-shadow:0 18px 40px rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center}}
 .ring{{width:212px;height:212px;border-radius:50%;border:3px solid rgba(255,255,255,.65);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}}
@@ -78,7 +83,7 @@ h1 em{{font-style:italic;color:{GOLD};background:linear-gradient(180deg,{GOLD_L}
 .ring b{{font-weight:900;font-size:50px;color:{RED};line-height:1.05;margin:4px 0}}
 .ring span{{font-weight:700;font-size:16px;color:{NAVY};width:170px;line-height:1.2}}
 .grid{{position:absolute;left:44px;right:44px;top:{TOP+44}px;display:grid;grid-template-columns:{"1fr 1fr 1fr 1fr" if land else "1fr 1fr"};gap:{16 if land else 20}px}}
-.card{{background:#fff;border-radius:16px;padding:{"18px 14px" if land else "30px 24px"};display:flex;gap:{12 if land else 16}px;align-items:flex-start;box-shadow:0 10px 26px rgba(14,27,54,.10);border-top:5px solid {GOLD}}}
+.card{{background:#fff;border-radius:16px;padding:{"18px 14px" if land else "30px 24px"};display:flex;gap:{12 if land else 16}px;align-items:flex-start;box-shadow:0 10px 26px rgba({RGB},.10);border-top:5px solid {GOLD}}}
 .ci{{flex:none;width:{56 if land else 70}px;height:{56 if land else 70}px;border-radius:50%;background:linear-gradient(145deg,{GOLD_L},{GOLD});display:flex;align-items:center;justify-content:center}}
 .ci.r{{background:linear-gradient(145deg,#FF5A5F,{RED})}}
 .ct{{font-weight:900;color:{NAVY};font-size:{16 if land else 25}px;letter-spacing:.5px;text-transform:uppercase;margin:4px 0 6px}}
